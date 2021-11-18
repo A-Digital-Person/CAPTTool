@@ -1,5 +1,5 @@
 """
-Project Ver: 0.0.1
+Project Ver: 0.0.2
 Project Start Date: 11/16/21
 Project Last Edit: 11/17/21
 Project Last Ver Change: 11/16/21
