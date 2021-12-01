@@ -163,6 +163,22 @@ cap = cv2.VideoCapture(camport)
 ftimg = ''
 def maskit():
     global ftimg
+    global point1R
+    global point1G
+    global point1B
+    global point1S
+    global point2R
+    global point2G
+    global point2B
+    global point2S
+    global point3R
+    global point3G
+    global point3B
+    global point3S
+    global point4R
+    global point4G
+    global point4B
+    global point4S
     point1min = [point1R,point1G,point1B]
     point1max = [point1R+point1S,point1G+point1S,point1B+point1S]
     point2min = [point2R,point2G,point2B]
@@ -171,6 +187,8 @@ def maskit():
     point3max = [point3R+point3S,point3G+point3S,point1B+point3S]
     point4min = [point4R,point4G,point4B]
     point4max = [point4R+point4S,point4G+point4S,point1B+point4S]
+    
+    #print (point1min, point1max)
     
     point1min = numpy.array(point1min, dtype = "uint8")
     point1max = numpy.array(point1max, dtype = "uint8")
