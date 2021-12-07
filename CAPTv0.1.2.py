@@ -3,7 +3,7 @@ import numpy
 import os
 import sys
 
-ver = "0.1.1"
+ver = "0.1.2"
 
 class eventcolors:
     WARNING = '\033[91mWarning: '
@@ -12,59 +12,8 @@ class eventcolors:
     CLB = '\033[95mCalibration: '
     ENDC = '\033[0m'
 
-p = open('persistent.capt', 'r')
-per = p.readlines()
-point1R = per[1]
-point1G = per[2]
-point1B = per[3]
-point1S = per[4]
-point2R = per[6]
-point2G = per[7]
-point2B = per[8]
-point2S = per[9]
-point3R = per[11]
-point3G = per[12]
-point3B = per[13]
-point3S = per[14]
-point4R = per[16]
-point4G = per[17]
-point4B = per[18]
-point4S = per[19]
-
-#Clean newline
-point1R = point1R[:-1]
-point1G = point1G[:-1]
-point1B = point1G[:-1]
-point1S = point1S[:-1]
-point2R = point2R[:-1]
-point2G = point2G[:-1]
-point2B = point2B[:-1]
-point2S = point2S[:-1]
-point3R = point3R[:-1]
-point3G = point3G[:-1]
-point3B = point3B[:-1]
-point3S = point3S[:-1]
-point4R = point4R[:-1]
-point4G = point4G[:-1]
-point4B = point4B[:-1]
-point4S = point4S[:-1]
-
-point1R = int(point1R)
-point1G = int(point1G)
-point1B = int(point1G)
-point1S = int(point1S)
-point2R = int(point2R)
-point2G = int(point2G)
-point2B = int(point2B)
-point2S = int(point2S)
-point3R = int(point3R)
-point3G = int(point3G)
-point3B = int(point3B)
-point3S = int(point3S)
-point4R = int(point4R)
-point4G = int(point4G)
-point4B = int(point4B)
-point4S = int(point4S)
+# p = open('persistent.capt', 'r')
+# per = p.readlines()
 
 print(f"{eventcolors.DEBUG}Starting CAPTv" + ver + f"{eventcolors.ENDC}")
 print(f"{eventcolors.DEBUG}Current Dir: "+ os.getcwd() + f"{eventcolors.ENDC}")
@@ -101,81 +50,84 @@ cv2.resizeWindow("CTRL2", 300, 300)
 cv2.resizeWindow("CTRL3", 300, 300)
 cv2.resizeWindow("CTRL4", 300, 300)
 
-cv2.createTrackbar("Red Min", "CTRL1", 0, 255, lambda x:None)
-cv2.createTrackbar("Green Min", "CTRL1", 0, 255, lambda x:None)
-cv2.createTrackbar("Blue Min", "CTRL1", 0, 255, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL1", 0, 255, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL1", 0, 255, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL1", 0, 255, lambda x:None)
 
-cv2.createTrackbar("Red Max", "CTRL1", 0, 255, lambda x:None)
-cv2.createTrackbar("Green Max", "CTRL1", 0, 255, lambda x:None)
-cv2.createTrackbar("Blue Max", "CTRL1", 0, 255, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL1", 0, 255, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL1", 0, 255, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL1", 0, 255, lambda x:None)
 
-cv2.createTrackbar("Red Min", "CTRL2", 0, 255, lambda x:None)
-cv2.createTrackbar("Green Min", "CTRL2", 0, 255, lambda x:None)
-cv2.createTrackbar("Blue Min", "CTRL2", 0, 255, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL2", 0, 255, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL2", 0, 255, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL2", 0, 255, lambda x:None)
 
-cv2.createTrackbar("Red Max", "CTRL2", 0, 255, lambda x:None)
-cv2.createTrackbar("Green Max", "CTRL2", 0, 255, lambda x:None)
-cv2.createTrackbar("Blue Max", "CTRL2", 0, 255, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL2", 0, 255, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL2", 0, 255, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL2", 0, 255, lambda x:None)
 
-cv2.createTrackbar("Red Min", "CTRL3", 0, 255, lambda x:None)
-cv2.createTrackbar("Green Min", "CTRL3", 0, 255, lambda x:None)
-cv2.createTrackbar("Blue Min", "CTRL3", 0, 255, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL3", 0, 255, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL3", 0, 255, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL3", 0, 255, lambda x:None)
 
-cv2.createTrackbar("Red Max", "CTRL3", 0, 255, lambda x:None)
-cv2.createTrackbar("Green Max", "CTRL3", 0, 255, lambda x:None)
-cv2.createTrackbar("Blue Max", "CTRL3", 0, 255, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL3", 0, 255, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL3", 0, 255, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL3", 0, 255, lambda x:None)
 
-cv2.createTrackbar("Red Min", "CTRL4", 0, 255, lambda x:None)
-cv2.createTrackbar("Green Min", "CTRL4", 0, 255, lambda x:None)
-cv2.createTrackbar("Blue Min", "CTRL4", 0, 255, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL4", 0, 255, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL4", 0, 255, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL4", 0, 255, lambda x:None)
 
-cv2.createTrackbar("Red Max", "CTRL4", 0, 255, lambda x:None)
-cv2.createTrackbar("Green Max", "CTRL4", 0, 255, lambda x:None)
-cv2.createTrackbar("Blue Max", "CTRL4", 0, 255, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL4", 0, 255, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL4", 0, 255, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL4", 0, 255, lambda x:None)
 
 keypress = 1
 
 while (keypress != 27):
     ret, frame = cap.read()
-    c1rl = cv2.getTrackbarPos("Red Min", "CTRL1")
-    c1gl = cv2.getTrackbarPos("Green Min", "CTRL1")
-    c1bl = cv2.getTrackbarPos("Blue Min", "CTRL1")
-    c1rh = cv2.getTrackbarPos("Red Max", "CTRL1")
-    c1gh = cv2.getTrackbarPos("Green Max", "CTRL1")
-    c1bh = cv2.getTrackbarPos("Blue Max", "CTRL1")
     
-    c2rl = cv2.getTrackbarPos("Red Min", "CTRL2")
-    c2gl = cv2.getTrackbarPos("Green Min", "CTRL2")
-    c2bl = cv2.getTrackbarPos("Blue Min", "CTRL2")
-    c2rh = cv2.getTrackbarPos("Red Max", "CTRL2")
-    c2gh = cv2.getTrackbarPos("Green Max", "CTRL2")
-    c2bh = cv2.getTrackbarPos("Blue Max", "CTRL2")
+    hsvframe = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
     
-    c3rl = cv2.getTrackbarPos("Red Min", "CTRL3")
-    c3gl = cv2.getTrackbarPos("Green Min", "CTRL3")
-    c3bl = cv2.getTrackbarPos("Blue Min", "CTRL3")
-    c3rh = cv2.getTrackbarPos("Red Max", "CTRL3")
-    c3gh = cv2.getTrackbarPos("Green Max", "CTRL3")
-    c3bh = cv2.getTrackbarPos("Blue Max", "CTRL3")
+    c1vl = cv2.getTrackbarPos("V Min", "CTRL1")
+    c1sl = cv2.getTrackbarPos("S Min", "CTRL1")
+    c1hl = cv2.getTrackbarPos("H Min", "CTRL1")
+    c1vh = cv2.getTrackbarPos("V Max", "CTRL1")
+    c1sh = cv2.getTrackbarPos("S Max", "CTRL1")
+    c1hh = cv2.getTrackbarPos("H Max", "CTRL1")
     
-    c4rl = cv2.getTrackbarPos("Red Min", "CTRL4")
-    c4gl = cv2.getTrackbarPos("Green Min", "CTRL4")
-    c4bl = cv2.getTrackbarPos("Blue Min", "CTRL4")
-    c4rh = cv2.getTrackbarPos("Red Max", "CTRL4")
-    c4gh = cv2.getTrackbarPos("Green Max", "CTRL4")
-    c4bh = cv2.getTrackbarPos("Blue Max", "CTRL4")
+    c2vl = cv2.getTrackbarPos("V Min", "CTRL2")
+    c2sl = cv2.getTrackbarPos("S Min", "CTRL2")
+    c2hl = cv2.getTrackbarPos("H Min", "CTRL2")
+    c2vh = cv2.getTrackbarPos("V Max", "CTRL2")
+    c2sh = cv2.getTrackbarPos("S Max", "CTRL2")
+    c2hh = cv2.getTrackbarPos("H Max", "CTRL2")
     
-    c1l = [c1bl,c1gl,c1rl]
-    c1h = [c1bh,c1gh,c1rh]
+    c3vl = cv2.getTrackbarPos("V Min", "CTRL3")
+    c3sl = cv2.getTrackbarPos("S Min", "CTRL3")
+    c3hl = cv2.getTrackbarPos("H Min", "CTRL3")
+    c3vh = cv2.getTrackbarPos("V Max", "CTRL3")
+    c3sh = cv2.getTrackbarPos("S Max", "CTRL3")
+    c3hh = cv2.getTrackbarPos("H Max", "CTRL3")
     
-    c2l = [c2bl,c2gl,c2rl]
-    c2h = [c2bh,c2gh,c2rh]
+    c4vl = cv2.getTrackbarPos("V Min", "CTRL4")
+    c4sl = cv2.getTrackbarPos("S Min", "CTRL4")
+    c4hl = cv2.getTrackbarPos("H Min", "CTRL4")
+    c4vh = cv2.getTrackbarPos("V Max", "CTRL4")
+    c4sh = cv2.getTrackbarPos("S Max", "CTRL4")
+    c4hh = cv2.getTrackbarPos("H Max", "CTRL4")
+    
+    c1l = [c1hl,c1sl,c1vl]
+    c1h = [c1hh,c1sh,c1vh]
+    
+    c2l = [c2hl,c2sl,c2vl]
+    c2h = [c2hh,c2sh,c2vh]
 
-    c3l = [c3bl,c3gl,c3rl]
-    c3h = [c3bh,c3gh,c3rh]
+    c3l = [c3hl,c3sl,c3vl]
+    c3h = [c3hh,c3sh,c3vh]
     
-    c4l = [c4bl,c4gl,c4rl]
-    c4h = [c4bh,c4gh,c4rh]
+    c4l = [c4hl,c4sl,c4vl]
+    c4h = [c4hh,c4sh,c4vh]
     
     c1l = numpy.array(c1l, dtype = "uint8")
     c1h = numpy.array(c1h, dtype = "uint8")
