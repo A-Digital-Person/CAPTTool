@@ -2,8 +2,10 @@ import cv2
 import numpy
 import os
 import sys
+import ctypes
 
-ver = "0.1.2"
+ver = "0.1.3"
+screen = ctypes.windll.user32
 
 class eventcolors:
     WARNING = '\033[91mWarning: '
@@ -40,7 +42,6 @@ if cap is None or not cap.isOpened():
         if cap is None or not cap.isOpened():
             print(f"{eventcolors.WARNING}Can't find a camera pluged in{eventcolors.ENDC}")
             print(f"{eventcolors.DEBUG}Check if your device is pluged into the device all the way{eventcolors.ENDC}")
-            time.sleep(3)
             sys.exit()
         else:
             print(f"{eventcolors.PASS}Cam found on port 2{eventcolors.ENDC}")
@@ -63,6 +64,13 @@ cv2.resizeWindow("CTRL1", 300, 300)
 cv2.resizeWindow("CTRL2", 300, 300)
 cv2.resizeWindow("CTRL3", 300, 300)
 cv2.resizeWindow("CTRL4", 300, 300)
+
+cv2.moveWindow('Orginal',0,0)
+cv2.moveWindow('Mask',640,0)
+cv2.moveWindow('CTRL1',40,510)
+cv2.moveWindow('CTRL2',340,510)
+cv2.moveWindow('CTRL3',640,510)
+cv2.moveWindow('CTRL4',940,510)
 
 hhigh = 255
 shigh = 255

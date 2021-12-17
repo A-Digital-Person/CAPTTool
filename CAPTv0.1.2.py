@@ -11,12 +11,26 @@ class eventcolors:
     PASS = '\033[92mInfo: '
     CLB = '\033[95mCalibration: '
     ENDC = '\033[0m'
-
-# p = open('persistent.capt', 'r')
-# per = p.readlines()
-
+    
 print(f"{eventcolors.DEBUG}Starting CAPTv" + ver + f"{eventcolors.ENDC}")
 print(f"{eventcolors.DEBUG}Current Dir: "+ os.getcwd() + f"{eventcolors.ENDC}")
+
+def savesession():
+    print ('My application is ending!')
+
+if os.path.exists(os.getcwd() + 'persistent.capt'):
+    print(f"{eventcolors.DEBUG}Using last session{eventcolors.ENDC}")
+else:
+    print(f"{eventcolors.DEBUG}No session found. Creating new...{eventcolors.ENDC}")
+    p = open('persistent.capt', 'w')
+    p.write("Color1HSV\n0\n0\n0\n0\n0\n0\nColor2\n0\n0\n0\n0\n0\n0\nColor3\n0\n0\n0\n0\n0\n0\nColor4\n0\n0\n0\n0\n0\n0\n")
+    p.close()
+    
+p = open('persistent.capt', 'r')
+per = p.readlines()
+H1 = per[1]
+S1 = per[2]
+V1 = per[3]
 
 cap = cv2.VideoCapture(0)
 if cap is None or not cap.isOpened():
@@ -26,7 +40,6 @@ if cap is None or not cap.isOpened():
         if cap is None or not cap.isOpened():
             print(f"{eventcolors.WARNING}Can't find a camera pluged in{eventcolors.ENDC}")
             print(f"{eventcolors.DEBUG}Check if your device is pluged into the device all the way{eventcolors.ENDC}")
-            time.sleep(3)
             sys.exit()
         else:
             print(f"{eventcolors.PASS}Cam found on port 2{eventcolors.ENDC}")
@@ -50,37 +63,41 @@ cv2.resizeWindow("CTRL2", 300, 300)
 cv2.resizeWindow("CTRL3", 300, 300)
 cv2.resizeWindow("CTRL4", 300, 300)
 
-cv2.createTrackbar("H Min", "CTRL1", 0, 255, lambda x:None)
-cv2.createTrackbar("S Min", "CTRL1", 0, 255, lambda x:None)
-cv2.createTrackbar("V Min", "CTRL1", 0, 255, lambda x:None)
+hhigh = 255
+shigh = 255
+vhigh = 255
 
-cv2.createTrackbar("H Max", "CTRL1", 0, 255, lambda x:None)
-cv2.createTrackbar("S Max", "CTRL1", 0, 255, lambda x:None)
-cv2.createTrackbar("V Max", "CTRL1", 0, 255, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL1", 0, hhigh, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL1", 0, shigh, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL1", 0, vhigh, lambda x:None)
 
-cv2.createTrackbar("H Min", "CTRL2", 0, 255, lambda x:None)
-cv2.createTrackbar("S Min", "CTRL2", 0, 255, lambda x:None)
-cv2.createTrackbar("V Min", "CTRL2", 0, 255, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL1", 0, hhigh, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL1", 0, shigh, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL1", 0, vhigh, lambda x:None)
 
-cv2.createTrackbar("H Max", "CTRL2", 0, 255, lambda x:None)
-cv2.createTrackbar("S Max", "CTRL2", 0, 255, lambda x:None)
-cv2.createTrackbar("V Max", "CTRL2", 0, 255, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL2", 0, hhigh, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL2", 0, shigh, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL2", 0, vhigh, lambda x:None)
 
-cv2.createTrackbar("H Min", "CTRL3", 0, 255, lambda x:None)
-cv2.createTrackbar("S Min", "CTRL3", 0, 255, lambda x:None)
-cv2.createTrackbar("V Min", "CTRL3", 0, 255, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL2", 0, hhigh, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL2", 0, shigh, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL2", 0, vhigh, lambda x:None)
 
-cv2.createTrackbar("H Max", "CTRL3", 0, 255, lambda x:None)
-cv2.createTrackbar("S Max", "CTRL3", 0, 255, lambda x:None)
-cv2.createTrackbar("V Max", "CTRL3", 0, 255, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL3", 0, hhigh, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL3", 0, shigh, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL3", 0, vhigh, lambda x:None)
 
-cv2.createTrackbar("H Min", "CTRL4", 0, 255, lambda x:None)
-cv2.createTrackbar("S Min", "CTRL4", 0, 255, lambda x:None)
-cv2.createTrackbar("V Min", "CTRL4", 0, 255, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL3", 0, hhigh, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL3", 0, shigh, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL3", 0, vhigh, lambda x:None)
 
-cv2.createTrackbar("H Max", "CTRL4", 0, 255, lambda x:None)
-cv2.createTrackbar("S Max", "CTRL4", 0, 255, lambda x:None)
-cv2.createTrackbar("V Max", "CTRL4", 0, 255, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL4", 0, hhigh, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL4", 0, shigh, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL4", 0, vhigh, lambda x:None)
+
+cv2.createTrackbar("H Max", "CTRL4", 0, hhigh, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL4", 0, shigh, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL4", 0, vhigh, lambda x:None)
 
 keypress = 1
 
