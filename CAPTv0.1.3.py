@@ -164,15 +164,15 @@ while (keypress != 27):
     c4l = numpy.array(c4l, dtype = "uint8")
     c4h = numpy.array(c4h, dtype = "uint8")
     
-    mask1 = cv2.inRange(frame, c1l, c1h)
-    mask2 = cv2.inRange(frame, c2l, c2h)
-    mask3 = cv2.inRange(frame, c3l, c3h)
-    mask4 = cv2.inRange(frame, c4l, c4h)
+    mask1 = cv2.inRange(hsvframe, c1l, c1h)
+    mask2 = cv2.inRange(hsvframe, c2l, c2h)
+    mask3 = cv2.inRange(hsvframe, c3l, c3h)
+    mask4 = cv2.inRange(hsvframe, c4l, c4h)
     
-    f1 = cv2.bitwise_or(frame, frame, mask = mask1)
-    f2 = cv2.bitwise_or(frame, frame, mask = mask2)
-    f3 = cv2.bitwise_or(frame, frame, mask = mask3)
-    f4 = cv2.bitwise_or(frame, frame, mask = mask4)
+    f1 = cv2.bitwise_or(hsvframe, hsvframe, mask = mask1)
+    f2 = cv2.bitwise_or(hsvframe, hsvframe, mask = mask2)
+    f3 = cv2.bitwise_or(hsvframe, hsvframe, mask = mask3)
+    f4 = cv2.bitwise_or(hsvframe, hsvframe, mask = mask4)
     
     final = cv2.bitwise_or(f1, f2)
     final = cv2.bitwise_or(final, f3)
