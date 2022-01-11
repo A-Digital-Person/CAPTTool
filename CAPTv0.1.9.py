@@ -195,6 +195,11 @@ while (keypress != 27):
     gframe3 = cv2.erode(gframe3, kernel, iterations=1)
     gframe4 = cv2.erode(gframe4, kernel, iterations=1)
     
+    gframe1 = cv2.dilate(gframe1,kernel,iterations = 1)
+    gframe2 = cv2.dilate(gframe2,kernel,iterations = 1)
+    gframe3 = cv2.dilate(gframe3,kernel,iterations = 1)
+    gframe4 = cv2.dilate(gframe4,kernel,iterations = 1)
+    
     mc1 = cv2.moments(gframe1)
     mc2 = cv2.moments(gframe2)
     mc3 = cv2.moments(gframe3)
@@ -269,6 +274,11 @@ while (keypress != 27):
     
     fimg = cv2.cvtColor(fimg,cv2.COLOR_HSV2BGR)
     
+    cv2.circle(fimg,(int(ctx1),int(cty1)),10,(255,0,0),-1)
+    cv2.circle(fimg,(int(ctx2),int(cty2)),10,(0,255,0),-1)
+    cv2.circle(fimg,(int(ctx3),int(cty3)),10,(0,0,255),-1)
+    cv2.circle(fimg,(int(ctx4),int(cty4)),10,(255,255,255),-1)
+    
     fortimer = int( ((time.time() - starttime)/60))*60
     
     fortimer = str( int((time.time() - starttime)/60) ) + ":" + str( int(time.time() - starttime)-int(fortimer) ).zfill(2)
@@ -284,3 +294,10 @@ while (keypress != 27):
     
 cap.release()
 cv2.destroyAllWindows()
+p = open('persistent.capt', 'w')
+#Color1HSV\n0\n0\n0\n0\n0\n0\nColor2\n0\n0\n0\n0\n0\n0\nColor3\n0\n0\n0\n0\n0\n0\nColor4\n0\n0\n0\n0\n0\n0\n
+    p.write("Color1HSV\n")
+    p.close()
+p = open('persistent.capt', 'a')
+    p.write(str(cv2.getTrackbarPos("V Min", "CTRL1")) + "\n")
+    p.close()
