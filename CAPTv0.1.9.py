@@ -6,6 +6,8 @@ import ctypes
 import time
 starttime = time.time()
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 ver = "0.1.3"
 screen = ctypes.windll.user32
 
@@ -21,19 +23,13 @@ class eventcolors:
 print(f"{eventcolors.DEBUG}Starting CAPTv" + ver + f"{eventcolors.ENDC}")
 print(f"{eventcolors.DEBUG}Current Dir: "+ os.getcwd() + f"{eventcolors.ENDC}")
 
-if os.path.exists(os.getcwd() + 'persistent.capt'):
+if os.path.exists(os.getcwd() + '/persistent.capt'):
     print(f"{eventcolors.DEBUG}Using last session{eventcolors.ENDC}")
 else:
     print(f"{eventcolors.DEBUG}No session found. Creating new...{eventcolors.ENDC}")
     p = open('persistent.capt', 'w')
-    p.write("Color1HSV\n0\n0\n0\n0\n0\n0\nColor2\n0\n0\n0\n0\n0\n0\nColor3\n0\n0\n0\n0\n0\n0\nColor4\n0\n0\n0\n0\n0\n0\n")
+    p.write("Color1HSV\n0\n0\n0\n0\n255\n255\nColor2\n0\n0\n0\n0\n255\n255\nColor3\n0\n0\n0\n0\n255\n255\nColor4\n0\n0\n0\n0\n255\n255\nOther\n255\n0\n255\n")
     p.close()
-    
-p = open('persistent.capt', 'r')
-per = p.readlines()
-H1 = per[1]
-S1 = per[2]
-V1 = per[3]
 
 cap = cv2.VideoCapture(0)
 if cap is None or not cap.isOpened():
@@ -60,59 +56,70 @@ cv2.namedWindow("CTRL1")
 cv2.namedWindow("CTRL2")
 cv2.namedWindow("CTRL3")
 cv2.namedWindow("CTRL4")
+cv2.namedWindow("OTHER")
 
-cv2.resizeWindow("CTRL1", 300, 300)
-cv2.resizeWindow("CTRL2", 300, 300)
-cv2.resizeWindow("CTRL3", 300, 300)
-cv2.resizeWindow("CTRL4", 300, 300)
+cv2.resizeWindow("CTRL1", 285, 300)
+cv2.resizeWindow("CTRL2", 285, 300)
+cv2.resizeWindow("CTRL3", 285, 300)
+cv2.resizeWindow("CTRL4", 285, 300)
+cv2.resizeWindow("OTHER", 285, 300)
 
 cv2.moveWindow('Orginal',0,0)
 cv2.moveWindow('Mask',640,0)
-cv2.moveWindow('CTRL1',40,510)
-cv2.moveWindow('CTRL2',340,510)
-cv2.moveWindow('CTRL3',640,510)
-cv2.moveWindow('CTRL4',940,510)
+cv2.moveWindow('CTRL1',0,510)
+cv2.moveWindow('CTRL2',285,510)
+cv2.moveWindow('CTRL3',570,510)
+cv2.moveWindow('CTRL4',855,510)
+cv2.moveWindow('OTHER',1140,510)
 
 hhigh = 255
 shigh = 255
 vhigh = 255
 
-cv2.createTrackbar("H Min", "CTRL1", 0, hhigh, lambda x:None)
-cv2.createTrackbar("S Min", "CTRL1", 0, shigh, lambda x:None)
-cv2.createTrackbar("V Min", "CTRL1", 0, vhigh, lambda x:None)
+p = open('persistent.capt', 'r')
+per = p.readlines()
 
-cv2.createTrackbar("H Max", "CTRL1", 0, hhigh, lambda x:None)
-cv2.createTrackbar("S Max", "CTRL1", shigh, shigh, lambda x:None)
-cv2.createTrackbar("V Max", "CTRL1", vhigh, vhigh, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL1", int(per[1]), hhigh, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL1", int(per[2]), shigh, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL1", int(per[3]), vhigh, lambda x:None)
 
-cv2.createTrackbar("H Min", "CTRL2", 0, hhigh, lambda x:None)
-cv2.createTrackbar("S Min", "CTRL2", 0, shigh, lambda x:None)
-cv2.createTrackbar("V Min", "CTRL2", 0, vhigh, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL1", int(per[4]), hhigh, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL1", int(per[5]), shigh, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL1", int(per[6]), vhigh, lambda x:None)
 
-cv2.createTrackbar("H Max", "CTRL2", 0, hhigh, lambda x:None)
-cv2.createTrackbar("S Max", "CTRL2", shigh, shigh, lambda x:None)
-cv2.createTrackbar("V Max", "CTRL2", vhigh, vhigh, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL2", int(per[8]), hhigh, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL2", int(per[9]), shigh, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL2", int(per[10]), vhigh, lambda x:None)
 
-cv2.createTrackbar("H Min", "CTRL3", 0, hhigh, lambda x:None)
-cv2.createTrackbar("S Min", "CTRL3", 0, shigh, lambda x:None)
-cv2.createTrackbar("V Min", "CTRL3", 0, vhigh, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL2", int(per[11]), hhigh, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL2", int(per[12]), shigh, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL2", int(per[13]), vhigh, lambda x:None)
 
-cv2.createTrackbar("H Max", "CTRL3", 0, hhigh, lambda x:None)
-cv2.createTrackbar("S Max", "CTRL3", shigh, shigh, lambda x:None)
-cv2.createTrackbar("V Max", "CTRL3", vhigh, vhigh, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL3", int(per[15]), hhigh, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL3", int(per[16]), shigh, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL3", int(per[17]), vhigh, lambda x:None)
 
-cv2.createTrackbar("H Min", "CTRL4", 0, hhigh, lambda x:None)
-cv2.createTrackbar("S Min", "CTRL4", 0, shigh, lambda x:None)
-cv2.createTrackbar("V Min", "CTRL4", 0, vhigh, lambda x:None)
+cv2.createTrackbar("H Max", "CTRL3", int(per[18]), hhigh, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL3", int(per[19]), shigh, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL3", int(per[20]), vhigh, lambda x:None)
 
-cv2.createTrackbar("H Max", "CTRL4", 0, hhigh, lambda x:None)
-cv2.createTrackbar("S Max", "CTRL4", shigh, shigh, lambda x:None)
-cv2.createTrackbar("V Max", "CTRL4", vhigh, vhigh, lambda x:None)
+cv2.createTrackbar("H Min", "CTRL4", int(per[22]), hhigh, lambda x:None)
+cv2.createTrackbar("S Min", "CTRL4", int(per[23]), shigh, lambda x:None)
+cv2.createTrackbar("V Min", "CTRL4", int(per[24]), vhigh, lambda x:None)
+
+cv2.createTrackbar("H Max", "CTRL4", int(per[25]), hhigh, lambda x:None)
+cv2.createTrackbar("S Max", "CTRL4", int(per[26]), shigh, lambda x:None)
+cv2.createTrackbar("V Max", "CTRL4", int(per[27]), vhigh, lambda x:None)
 
 cv2.createTrackbar("Mask", "CTRL1", 1, 1, lambda x:None)
 cv2.createTrackbar("Mask", "CTRL2", 1, 1, lambda x:None)
 cv2.createTrackbar("Mask", "CTRL3", 1, 1, lambda x:None)
 cv2.createTrackbar("Mask", "CTRL4", 1, 1, lambda x:None)
+
+cv2.createTrackbar("Timer Red", "OTHER", int(per[29]), 255, lambda x:None)
+cv2.createTrackbar("Timer Green", "OTHER", int(per[30]), 255, lambda x:None)
+cv2.createTrackbar("Timer Blue", "OTHER", int(per[31]), 255, lambda x:None)
+
 
 keypress = 1
 
@@ -233,10 +240,10 @@ while (keypress != 27):
         ctx4 = 1
         cty4 = 1
         
-    print(f"{eventcolors.CEN}1: x:" + str(ctx1) + " y:" + str(cty1) + f"{eventcolors.ENDC}")
-    print(f"{eventcolors.CEN}2: x:" + str(ctx2) + " y:" + str(cty2) + f"{eventcolors.ENDC}")
-    print(f"{eventcolors.CEN}3: x:" + str(ctx3) + " y:" + str(cty3) + f"{eventcolors.ENDC}")
-    print(f"{eventcolors.CEN}4: x:" + str(ctx4) + " y:" + str(cty4) + f"{eventcolors.ENDC}")
+#     print(f"{eventcolors.CEN}1: x:" + str(ctx1) + " y:" + str(cty1) + f"{eventcolors.ENDC}")
+#     print(f"{eventcolors.CEN}2: x:" + str(ctx2) + " y:" + str(cty2) + f"{eventcolors.ENDC}")
+#     print(f"{eventcolors.CEN}3: x:" + str(ctx3) + " y:" + str(cty3) + f"{eventcolors.ENDC}")
+#     print(f"{eventcolors.CEN}4: x:" + str(ctx4) + " y:" + str(cty4) + f"{eventcolors.ENDC}")
     
     cv2.circle(frame,(int(ctx1),int(cty1)),10,(255,0,0),-1)
     cv2.circle(frame,(int(ctx2),int(cty2)),10,(0,255,0),-1)
@@ -274,18 +281,20 @@ while (keypress != 27):
     
     fimg = cv2.cvtColor(fimg,cv2.COLOR_HSV2BGR)
     
-    cv2.circle(fimg,(int(ctx1),int(cty1)),10,(255,0,0),-1)
-    cv2.circle(fimg,(int(ctx2),int(cty2)),10,(0,255,0),-1)
-    cv2.circle(fimg,(int(ctx3),int(cty3)),10,(0,0,255),-1)
-    cv2.circle(fimg,(int(ctx4),int(cty4)),10,(255,255,255),-1)
+    if cv2.getTrackbarPos("Mask", "CTRL1") == 1:
+        cv2.circle(fimg,(int(ctx1),int(cty1)),10,(255,0,0),-1)
+    if cv2.getTrackbarPos("Mask", "CTRL2") == 1:
+        cv2.circle(fimg,(int(ctx2),int(cty2)),10,(0,255,0),-1)
+    if cv2.getTrackbarPos("Mask", "CTRL3") == 1:
+        cv2.circle(fimg,(int(ctx3),int(cty3)),10,(0,0,255),-1)
+    if cv2.getTrackbarPos("Mask", "CTRL4") == 1:
+        cv2.circle(fimg,(int(ctx4),int(cty4)),10,(255,255,255),-1)
     
     fortimer = int( ((time.time() - starttime)/60))*60
     
     fortimer = str( int((time.time() - starttime)/60) ) + ":" + str( int(time.time() - starttime)-int(fortimer) ).zfill(2)
     
-    print(f"{eventcolors.TIMER}" + str(fortimer) + f"{eventcolors.ENDC}")
-    
-    frame = cv2.putText(frame, "Session Time: " + fortimer, (3,27), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,255), 2, cv2.LINE_AA)
+    frame = cv2.putText(frame, "Session Time: " + fortimer, (3,27), cv2.FONT_HERSHEY_SIMPLEX, 1, (cv2.getTrackbarPos("Timer Blue", "OTHER"),cv2.getTrackbarPos("Timer Green", "OTHER"),cv2.getTrackbarPos("Timer Red", "OTHER")), 2, cv2.LINE_AA)
     
     cv2.imshow("Orginal", frame)
     cv2.imshow("Mask", fimg)
@@ -293,11 +302,41 @@ while (keypress != 27):
     keypress = cv2.waitKey(30)
     
 cap.release()
-cv2.destroyAllWindows()
 p = open('persistent.capt', 'w')
 #Color1HSV\n0\n0\n0\n0\n0\n0\nColor2\n0\n0\n0\n0\n0\n0\nColor3\n0\n0\n0\n0\n0\n0\nColor4\n0\n0\n0\n0\n0\n0\n
-    p.write("Color1HSV\n")
-    p.close()
+p.write("Color1HSV\n")
+p.close()
 p = open('persistent.capt', 'a')
-    p.write(str(cv2.getTrackbarPos("V Min", "CTRL1")) + "\n")
-    p.close()
+p.write(str(cv2.getTrackbarPos("H Min", "CTRL1")) + "\n")
+p.write(str(cv2.getTrackbarPos("S Min", "CTRL1")) + "\n")
+p.write(str(cv2.getTrackbarPos("V Min", "CTRL1")) + "\n")
+p.write(str(cv2.getTrackbarPos("H Max", "CTRL1")) + "\n")
+p.write(str(cv2.getTrackbarPos("S Max", "CTRL1")) + "\n")
+p.write(str(cv2.getTrackbarPos("V Max", "CTRL1")) + "\n")
+p.write("Color2\n")
+p.write(str(cv2.getTrackbarPos("H Min", "CTRL2")) + "\n")
+p.write(str(cv2.getTrackbarPos("S Min", "CTRL2")) + "\n")
+p.write(str(cv2.getTrackbarPos("V Min", "CTRL2")) + "\n")
+p.write(str(cv2.getTrackbarPos("H Max", "CTRL2")) + "\n")
+p.write(str(cv2.getTrackbarPos("S Max", "CTRL2")) + "\n")
+p.write(str(cv2.getTrackbarPos("V Max", "CTRL2")) + "\n")
+p.write("Color3\n")
+p.write(str(cv2.getTrackbarPos("H Min", "CTRL3")) + "\n")
+p.write(str(cv2.getTrackbarPos("S Min", "CTRL3")) + "\n")
+p.write(str(cv2.getTrackbarPos("V Min", "CTRL3")) + "\n")
+p.write(str(cv2.getTrackbarPos("H Max", "CTRL3")) + "\n")
+p.write(str(cv2.getTrackbarPos("S Max", "CTRL3")) + "\n")
+p.write(str(cv2.getTrackbarPos("V Max", "CTRL3")) + "\n")
+p.write("Color4\n")
+p.write(str(cv2.getTrackbarPos("H Min", "CTRL4")) + "\n")
+p.write(str(cv2.getTrackbarPos("S Min", "CTRL4")) + "\n")
+p.write(str(cv2.getTrackbarPos("V Min", "CTRL4")) + "\n")
+p.write(str(cv2.getTrackbarPos("H Max", "CTRL4")) + "\n")
+p.write(str(cv2.getTrackbarPos("S Max", "CTRL4")) + "\n")
+p.write(str(cv2.getTrackbarPos("V Max", "CTRL4")) + "\n")
+p.write("Other\n")
+p.write(str(cv2.getTrackbarPos("Timer Red", "OTHER")) + "\n")
+p.write(str(cv2.getTrackbarPos("Timer Green", "OTHER")) + "\n")
+p.write(str(cv2.getTrackbarPos("Timer Blue", "OTHER")) + "\n")
+p.close()
+cv2.destroyAllWindows()
