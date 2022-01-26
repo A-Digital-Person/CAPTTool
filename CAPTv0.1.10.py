@@ -5,9 +5,12 @@ import sys
 import ctypes
 import time
 import math
+import tkinter as tk
+from tkinter import *
 from datetime import datetime
 import re
 starttime = time.time()
+astarttime = time.time()
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,43 +27,135 @@ class eventcolors:
     WARNING = str(datetime.now()) + ' [Warning]: '
     ERROR = str(datetime.now()) + ' [ERROR]: '
     DEBUG = str(datetime.now()) + ' [Debug]: '
-    PASS = str(datetime.now()) + ' [Info]: '
+    INFO = str(datetime.now()) + ' [Info]: '
     CLB = str(datetime.now()) + ' [Calibration]: '
     CEN = str(datetime.now()) + ' [Centroid]: '
     TIMER = str(datetime.now()) + ' [Session Timer]: '
-    ENDC = ''
     
 
     
-print(f"{eventcolors.DEBUG}Starting CAPTv" + ver + f"{eventcolors.ENDC}")
-print(f"{eventcolors.DEBUG}Current Dir: "+ os.getcwd() + f"{eventcolors.ENDC}")
+print(f"{eventcolors.INFO}Starting CAPTv" + ver + f"")
+print(f"{eventcolors.INFO}Current Dir: "+ os.getcwd() + f"")
 
 if os.path.exists(os.getcwd() + '/persistent.capt'):
-    print(f"{eventcolors.DEBUG}Using last session{eventcolors.ENDC}")
+    print(f"{eventcolors.DEBUG}Using last session")
 else:
-    print(f"{eventcolors.DEBUG}No session found. Creating new...{eventcolors.ENDC}")
+    print(f"{eventcolors.DEBUG}No session found. Creating new...")
     p = open('persistent.capt', 'w')
     p.write("Color1HSV\n0\n0\n0\n0\n255\n255\nColor2\n0\n0\n0\n0\n255\n255\nColor3\n0\n0\n0\n0\n255\n255\nColor4\n0\n0\n0\n0\n255\n255\nOther\n255\n0\n255\n1\n1\n1\n1\n10\n5\n0\n0\n120\n")
     p.close()
-
-cap = cv2.VideoCapture(0)
-if cap is None or not cap.isOpened():
-    cap = cv2.VideoCapture(1)
+    
+def trycam():
+    os.execl(sys.executable, os.path.abspath(__file__), *sys.argv) 
+    
+if True:
+    cap = cv2.VideoCapture(0)
     if cap is None or not cap.isOpened():
-        cap = cv2.VideoCapture(2)
+        cap = cv2.VideoCapture(1)
         if cap is None or not cap.isOpened():
-            print(f"{eventcolors.WARNING}Can't find a camera pluged in{eventcolors.ENDC}")
-            print(f"{eventcolors.DEBUG}Check if your device is pluged into the device all the way{eventcolors.ENDC}")
-            sys.exit()
+            cap = cv2.VideoCapture(2)
+            if cap is None or not cap.isOpened():
+                def nothing():
+                    pass
+                print(f"{eventcolors.WARNING}Can't find a camera pluged in")
+                print(f"{eventcolors.DEBUG}Check if your device is pluged into the device all the way")
+                master = Tk()
+                master.lift()
+                master.geometry("400x150")
+                master.eval('tk::PlaceWindow . center')
+                master.title('No Camera Error')
+                l1 = Label(master, text = "Can't find a camera pluged in!",fg='#f00')
+                l1.config(font =("Courier", 16))
+                l2 = Label(master, text = "Check if your device is pluged ",fg='#f00')
+                l2.config(font =("Courier", 14))
+                l3 = Label(master, text = "into the device all the way.",fg='#f00')
+                l3.config(font =("Courier", 14))
+                b1 = Button(master, text = 'Try Again', width = 30, command=lambda: trycam())
+                b2 = Button(master, text = 'Quit', width = 30, command=lambda: sys.exit())
+                l1.pack()
+                l2.pack()
+                l3.pack()
+                b1.pack()
+                b2.pack()
+                mainloop()
+            else:
+                print(f"{eventcolors.INFO}Cam found on port 2")
+                camport = 2
         else:
-            print(f"{eventcolors.PASS}Cam found on port 2{eventcolors.ENDC}")
-            camport = 2
+            print(f"{eventcolors.INFO}Cam found on port 1")
+            camport = 1
     else:
-        print(f"{eventcolors.PASS}Cam found on port 1{eventcolors.ENDC}")
-        camport = 1
-else:
-    print(f"{eventcolors.PASS}Cam found on port 0{eventcolors.ENDC}")
-    camport = 0
+        print(f"{eventcolors.INFO}Cam found on port 0")
+        camport = 0
+        
+mintarget = 0
+maxtarget = 180
+
+allow = False
+showerror = False
+    
+mintarget_var = 0
+maxtarget_var = 0
+while not allow:
+    sys.stdout.close()
+    sys.stdout = open(str(loglocation), 'a')
+    master = Tk()
+    master.lift()
+    master.geometry("400x400")
+    master.eval('tk::PlaceWindow . center')
+    master.title('CAPT Start')
+    mintarget_var = tk.StringVar()
+    maxtarget_var = tk.StringVar()
+
+    def useless():
+        global mintarget
+        global maxtarget
+        mintarget = mintarget_var.get()
+        maxtarget = maxtarget_var.get()
+        master.destroy()
+    l1 = Label(master, text = "CAPT Start!",fg='#006')
+    l1.config(font =("Courier", 16))
+    l2 = Label(master, text = "Enter the value of the dimentions",fg='#000')
+    l2.config(font =("Courier", 12))
+    l3 = Label(master, text = "you would like to use.",fg='#000')
+    l3.config(font =("Courier", 12))
+    l4 = Label(master, text = "(You can leave them blank",fg='#6e1010')
+    l4.config(font =("Courier", 12))
+    l5 = Label(master, text = "to use last session.)",fg='#6e1010')
+    l5.config(font =("Courier", 12))
+    if showerror:
+        error = Label(master, text = "Entry is not an integer)",fg='#ff0000')
+        error.config(font =("Courier", 12))
+    mintar = tk.Label(master, text = 'Enter Your Min Target', font=('Courier',10, 'bold'))
+    minentry = tk.Entry(master,textvariable = mintarget_var, font=('Courier',10,'normal'))
+    maxtar = tk.Label(master, text = 'Enter Your Max Target', font=('Courier',10, 'bold'))
+    maxentry = tk.Entry(master,textvariable = maxtarget_var, font=('Courier',10,'normal'))
+    b1 = Button(master, text = 'Start', width = 30, command=lambda: useless())
+    b2 = Button(master, text = 'Quit', width = 30, command=lambda: sys.exit())
+    l1.pack()
+    l2.pack()
+    l3.pack()
+    l4.pack()
+    l5.pack()
+    if showerror:
+        error.pack()
+    mintar.pack()
+    minentry.pack()
+    maxtar.pack()
+    maxentry.pack()
+    b1.pack()
+    b2.pack()
+    mainloop()
+    if mintarget != '' and maxtarget != '':
+        try:
+            mintarget = int(mintarget)
+            maxtarget = int(maxtarget)
+        except:
+            allow = False
+    else:
+        allow = True
+            
+starttime = time.time()
 
 cv2.namedWindow("Orginal")
 cv2.namedWindow("Mask")
@@ -308,10 +403,10 @@ while (keypress != 27):
         ctx4 = 1
         cty4 = 1
         
-#     print(f"{eventcolors.CEN}1: x:" + str(ctx1) + " y:" + str(cty1) + f"{eventcolors.ENDC}")
-#     print(f"{eventcolors.CEN}2: x:" + str(ctx2) + " y:" + str(cty2) + f"{eventcolors.ENDC}")
-#     print(f"{eventcolors.CEN}3: x:" + str(ctx3) + " y:" + str(cty3) + f"{eventcolors.ENDC}")
-#     print(f"{eventcolors.CEN}4: x:" + str(ctx4) + " y:" + str(cty4) + f"{eventcolors.ENDC}")
+#     print(f"{eventcolors.CEN}1: x:" + str(ctx1) + " y:" + str(cty1) + f"")
+#     print(f"{eventcolors.CEN}2: x:" + str(ctx2) + " y:" + str(cty2) + f"")
+#     print(f"{eventcolors.CEN}3: x:" + str(ctx3) + " y:" + str(cty3) + f"")
+#     print(f"{eventcolors.CEN}4: x:" + str(ctx4) + " y:" + str(cty4) + f"")
     
     cv2.circle(frame,(int(ctx1),int(cty1)),cv2.getTrackbarPos("Dot Scale", "OTHER"),(255,0,0),-1)
     cv2.circle(frame,(int(ctx2),int(cty2)),cv2.getTrackbarPos("Dot Scale", "OTHER"),(0,255,0),-1)
@@ -392,7 +487,7 @@ while (keypress != 27):
     except:
         frame = cv2.putText(frame, "ERROR: Calculating error", (3,57), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 5, cv2.LINE_AA)
         frame = cv2.putText(frame, "ERROR: Calculating error", (3,57), cv2.FONT_HERSHEY_SIMPLEX, 1, (cv2.getTrackbarPos("Text B", "OTHER"),cv2.getTrackbarPos("Text G", "OTHER"),cv2.getTrackbarPos("Text R", "OTHER")), 2, cv2.LINE_AA)
-        print(f"{eventcolors.ERROR}Can't calculate angle{eventcolors.ENDC}")
+        print(f"{eventcolors.ERROR}Can't calculate angle")
 
     
     cv2.imshow("Orginal", frame)
@@ -450,5 +545,11 @@ p.write(str(cv2.getTrackbarPos("Blackout", "OTHER")) + "\n")
 p.write(str(cv2.getTrackbarPos("Target Min", "OTHER")) + "\n")
 p.write(str(cv2.getTrackbarPos("Target Max", "OTHER")) + "\n")
 p.close()
+
+fortimer = int( ((time.time() - astarttime)/60))*60
+fortimer = str( int((time.time() - astarttime)/60) ) + ":" + str( int(time.time() - starttime)-int(fortimer) ).zfill(2)
+
+print(f"{eventcolors.INFO}Program ended after running for " + str(fortimer))
 sys.stdout.close()
 cv2.destroyAllWindows()
+sys.exit()
