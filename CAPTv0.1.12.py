@@ -361,16 +361,16 @@ cv2.createTrackbar("Blackout", "OTHER", int(per['blackout']), 1, lambda x:None)
 cv2.createTrackbar("Text R", "OTHER", int(per['text']['r']), 255, lambda x:None)
 cv2.createTrackbar("Text G", "OTHER", int(per['text']['g']), 255, lambda x:None)
 cv2.createTrackbar("Text B", "OTHER", int(per['text']['b']), 255, lambda x:None)
-cv2.createTrackbar("Dot Scale", "OTHER", int(per['scale']), 20, lambda x:None)
-cv2.createTrackbar("Line Scale", "OTHER", int(per['scale']), 20, lambda x:None)
+cv2.createTrackbar("Dot Scale", "OTHER", int(per['scale']['dot']), 20, lambda x:None)
+cv2.createTrackbar("Line Scale", "OTHER", int(per['scale']['line']), 20, lambda x:None)
 
 def close(x):
     cv2.setTrackbarPos("Blackout", "OTHER", 0)
 
-cv2.createTrackbar("Mask", "CTRL1", int(per[32]), 1, close)
-cv2.createTrackbar("Mask", "CTRL2", int(per[33]), 1, close)
-cv2.createTrackbar("Mask", "CTRL3", int(per[34]), 1, close)
-cv2.createTrackbar("Mask", "CTRL4", int(per[35]), 1, close)
+cv2.createTrackbar("Mask", "CTRL1", int(per['color1']['mask']), 1, close)
+cv2.createTrackbar("Mask", "CTRL2", int(per['color1']['mask']), 1, close)
+cv2.createTrackbar("Mask", "CTRL3", int(per['color3']['mask']), 1, close)
+cv2.createTrackbar("Mask", "CTRL4", int(per['color4']['mask']), 1, close)
 
 keypress = 1
 
@@ -661,51 +661,45 @@ while (keypress != 27):
     keypress = cv2.waitKey(30)
     
 cap.release()
-p = open('persistent.capt', 'w')
-#Color1HSV\n0\n0\n0\n0\n0\n0\nColor2\n0\n0\n0\n0\n0\n0\nColor3\n0\n0\n0\n0\n0\n0\nColor4\n0\n0\n0\n0\n0\n0\n
-p.write("Color1HSV\n")
-p.close()
-p = open('persistent.capt', 'a')
-p.write(str(cv2.getTrackbarPos("H Min", "CTRL1")) + "\n")
-p.write(str(cv2.getTrackbarPos("S Min", "CTRL1")) + "\n")
-p.write(str(cv2.getTrackbarPos("V Min", "CTRL1")) + "\n")
-p.write(str(cv2.getTrackbarPos("H Max", "CTRL1")) + "\n")
-p.write(str(cv2.getTrackbarPos("S Max", "CTRL1")) + "\n")
-p.write(str(cv2.getTrackbarPos("V Max", "CTRL1")) + "\n")
-p.write("Color2\n")
-p.write(str(cv2.getTrackbarPos("H Min", "CTRL2")) + "\n")
-p.write(str(cv2.getTrackbarPos("S Min", "CTRL2")) + "\n")
-p.write(str(cv2.getTrackbarPos("V Min", "CTRL2")) + "\n")
-p.write(str(cv2.getTrackbarPos("H Max", "CTRL2")) + "\n")
-p.write(str(cv2.getTrackbarPos("S Max", "CTRL2")) + "\n")
-p.write(str(cv2.getTrackbarPos("V Max", "CTRL2")) + "\n")
-p.write("Color3\n")
-p.write(str(cv2.getTrackbarPos("H Min", "CTRL3")) + "\n")
-p.write(str(cv2.getTrackbarPos("S Min", "CTRL3")) + "\n")
-p.write(str(cv2.getTrackbarPos("V Min", "CTRL3")) + "\n")
-p.write(str(cv2.getTrackbarPos("H Max", "CTRL3")) + "\n")
-p.write(str(cv2.getTrackbarPos("S Max", "CTRL3")) + "\n")
-p.write(str(cv2.getTrackbarPos("V Max", "CTRL3")) + "\n")
-p.write("Color4\n")
-p.write(str(cv2.getTrackbarPos("H Min", "CTRL4")) + "\n")
-p.write(str(cv2.getTrackbarPos("S Min", "CTRL4")) + "\n")
-p.write(str(cv2.getTrackbarPos("V Min", "CTRL4")) + "\n")
-p.write(str(cv2.getTrackbarPos("H Max", "CTRL4")) + "\n")
-p.write(str(cv2.getTrackbarPos("S Max", "CTRL4")) + "\n")
-p.write(str(cv2.getTrackbarPos("V Max", "CTRL4")) + "\n")
-p.write("Other\n")
-p.write(str(cv2.getTrackbarPos("Text R", "OTHER")) + "\n")
-p.write(str(cv2.getTrackbarPos("Text G", "OTHER")) + "\n")
-p.write(str(cv2.getTrackbarPos("Text B", "OTHER")) + "\n")
-p.write(str(cv2.getTrackbarPos("Mask", "CTRL1")) + "\n")
-p.write(str(cv2.getTrackbarPos("Mask", "CTRL2")) + "\n")
-p.write(str(cv2.getTrackbarPos("Mask", "CTRL3")) + "\n")
-p.write(str(cv2.getTrackbarPos("Mask", "CTRL4")) + "\n")
-p.write(str(cv2.getTrackbarPos("Dot Scale", "OTHER")) + "\n")
-p.write(str(cv2.getTrackbarPos("Line Scale", "OTHER")) + "\n")
-p.write(str(cv2.getTrackbarPos("Blackout", "OTHER")) + "\n")
-p.write(str(cv2.getTrackbarPos("Target Min", "OTHER")) + "\n")
-p.write(str(cv2.getTrackbarPos("Target Max", "OTHER")) + "\n")
+p = open(r'persistent.yml', 'w')
+saveraw = {'color1': {'hl': int(cv2.getTrackbarPos("H Min", "CTRL1")),
+                      'sl': int(cv2.getTrackbarPos("S Min", "CTRL1")),
+                      'vl': int(cv2.getTrackbarPos("V Min", "CTRL1")),
+                      'hh': int(cv2.getTrackbarPos("H Max", "CTRL1")),
+                      'sh': int(cv2.getTrackbarPos("S Max", "CTRL1")),
+                      'vh': int(cv2.getTrackbarPos("V Max", "CTRL1")),
+                      'mask': int(cv2.getTrackbarPos("Mask", "CTRL1"))},
+           'color2': {'hl': int(cv2.getTrackbarPos("H Min", "CTRL2")),
+                      'sl': int(cv2.getTrackbarPos("S Min", "CTRL2")),
+                      'vl': int(cv2.getTrackbarPos("V Min", "CTRL2")),
+                      'hh': int(cv2.getTrackbarPos("H Min", "CTRL2")),
+                      'sh': int(cv2.getTrackbarPos("S Min", "CTRL2")),
+                      'vh': int(cv2.getTrackbarPos("V Min", "CTRL2")),
+                      'mask': int(cv2.getTrackbarPos("Mask", "CTRL2"))},
+           'color3': {'hl': int(cv2.getTrackbarPos("H Min", "CTRL3")),
+                      'sl': int(cv2.getTrackbarPos("S Min", "CTRL3")),
+                      'vl': int(cv2.getTrackbarPos("V Min", "CTRL3")),
+                      'hh': int(cv2.getTrackbarPos("H Min", "CTRL3")),
+                      'sh': int(cv2.getTrackbarPos("S Min", "CTRL3")),
+                      'vh': int(cv2.getTrackbarPos("V Min", "CTRL3")),
+                      'mask': int(cv2.getTrackbarPos("Mask", "CTRL3"))},
+           'color4': {'hl': int(cv2.getTrackbarPos("H Min", "CTRL4")),
+                      'sl': int(cv2.getTrackbarPos("S Min", "CTRL4")),
+                      'vl': int(cv2.getTrackbarPos("V Min", "CTRL4")),
+                      'hh': int(cv2.getTrackbarPos("H Min", "CTRL4")),
+                      'sh': int(cv2.getTrackbarPos("S Min", "CTRL4")),
+                      'vh': int(cv2.getTrackbarPos("V Min", "CTRL4")),
+                      'mask': int(cv2.getTrackbarPos("Mask", "CTRL4"))},
+           'text': {'r': int(cv2.getTrackbarPos("Text R", "OTHER")),
+                    'g': int(cv2.getTrackbarPos("Text G", "OTHER")),
+                    'b': int(cv2.getTrackbarPos("Text B", "OTHER"))},
+           'scale': {'dot': int(cv2.getTrackbarPos("Dot Scale", "OTHER")),
+                     'line': int(cv2.getTrackbarPos("Line Scale", "OTHER"))},
+           'targets': {'min':int(cv2.getTrackbarPos("Target Min", "OTHER")),
+                       'max': int(cv2.getTrackbarPos("Target Max", "OTHER"))},
+           'blackout': int(cv2.getTrackbarPos("Blackout", "OTHER"))}
+yaml.dump(saveraw, p)
+# p.write(saveme)
 p.close()
 
 fortimer = int( ((time.time() - astarttime)/60))*60

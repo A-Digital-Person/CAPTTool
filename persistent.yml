@@ -1,0 +1,43 @@
+blackout: 0
+color1:
+  hh: 110
+  hl: 76
+  mask: 0
+  sh: 255
+  sl: 74
+  vh: 255
+  vl: 120
+color2:
+  hh: 32
+  hl: 32
+  mask: 0
+  sh: 86
+  sl: 86
+  vh: 78
+  vl: 78
+color3:
+  hh: 6
+  hl: 6
+  mask: 0
+  sh: 128
+  sl: 128
+  vh: 0
+  vl: 0
+color4:
+  hh: 117
+  hl: 117
+  mask: 0
+  sh: 104
+  sl: 104
+  vh: 0
+  vl: 0
+scale:
+  dot: 10
+  line: 5
+targets:
+  max: 122
+  min: 21
+text:
+  b: 255
+  g: 255
+  r: 78
