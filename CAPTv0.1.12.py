@@ -1,3 +1,19 @@
+# Libs use:
+# cv2 - Image manulipion lib
+# numpy - Array creator
+# os - File mangement
+# sys - Stops program
+# ctypes - Screen size
+# time - Timer
+# math - Angle caluclation
+# tkinter - Opening menus
+# datetime - Gets the current data and time
+# re - Cleans the datetime for file names
+# webbrowser - Opens the help page
+# shutil - Resets OPERATING data. Not user data outputs
+# pysine - Plays the output tone
+# ymal - Remembering session data mangement
+
 import cv2
 import numpy
 import os
@@ -13,66 +29,34 @@ import webbrowser
 import shutil
 import pysine
 import yaml
-base = """
-  color1:
-    hl: 0
-    sl: 0
-    vl: 0
-    hh: 0
-    sh: 255
-    vh: 255
-    mask: False
-  color2:
-    hl: 0
-    sl: 0
-    vl: 0
-    hh: 0
-    sh: 255
-    vh: 255
-    mask: False
-  color3:
-    hl: 0
-    sl: 0
-    vl: 0
-    hh: 0
-    sh: 255
-    vh: 255
-    mask: False
-  color4:
-    hl: 0
-    sl: 0
-    vl: 0
-    hh: 0
-    sh: 255
-    vh: 255
-    mask: False
-  text:
-    r: 255
-    g: 255
-    b: 255
-  scale:
-    dot: 10
-    line: 5
-  targets:
-    min: 0
-    max: 180
-  blackout: False
-"""
+
+# Sets data and time vars
 baseraw = {'color1': {'hl': 0, 'sl': 0, 'vl': 0, 'hh': 0, 'sh': 255, 'vh': 255, 'mask': 1}, 'color2': {'hl': 0, 'sl': 0, 'vl': 0, 'hh': 0, 'sh': 255, 'vh': 255, 'mask': 1}, 'color3': {'hl': 0, 'sl': 0, 'vl': 0, 'hh': 0, 'sh': 255, 'vh': 255, 'mask': 1}, 'color4': {'hl': 0, 'sl': 0, 'vl': 0, 'hh': 0, 'sh': 255, 'vh': 255, 'mask': 1}, 'text': {'r': 255, 'g': 255, 'b': 255}, 'scale': {'dot': 10, 'line': 5}, 'targets': {'min': 0, 'max': 180}, 'blackout': 0}
 starttime = time.time()
 astarttime = time.time()
 
+#Sets the data file for output
+datafile = 'data/' + str(datetime.now()) + '.CAPTResults.csv'
+
+#Fix derectory to accual user dir rather than admin
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+#Create log and data dir and files if missing
 if not os.path.exists(os.getcwd() + '/logs'):
-    os.makedirs(os.getcwd() + '/logs') 
+    os.makedirs(os.getcwd() + '/logs')
 loglocation = "logs/" + str(datetime.now()) + '.log'
 loglocation = re.sub(':', '', loglocation)
 sys.stdout = open(str(loglocation), 'x')
 
-ver = "0.1.10"
+if not os.path.exists(os.getcwd() + '/data'):
+    os.makedirs(os.getcwd() + '/data')
+datafile = re.sub(':', '', datafile)
+
+#Build and screen dimentions
+ver = "0.1.12"
 screen = ctypes.windll.user32
 
+#Log file prefixes
 class logtypes:
     WARNING = str(datetime.now()) + ' [Warning]: '
     ERROR = str(datetime.now()) + ' [ERROR]: '
@@ -81,10 +65,12 @@ class logtypes:
     CLB = str(datetime.now()) + ' [Calibration]: '
     CEN = str(datetime.now()) + ' [Centroid]: '
     TIMER = str(datetime.now()) + ' [Session Timer]: '
-    
+
+#Logfile starting
 print(f"{logtypes.INFO}Starting CAPTv" + ver + f"")
 print(f"{logtypes.INFO}Current Dir: "+ os.getcwd() + f"")
 
+#Use old data if found
 if os.path.exists(os.getcwd() + '/persistent.yml'):
     print(f"{logtypes.DEBUG}Using last session")
 else:
@@ -93,10 +79,12 @@ else:
     yaml.dump(baseraw, p)
     #p.write("Color1HSV\n0\n0\n0\n0\n255\n255\nColor2\n0\n0\n0\n0\n255\n255\nColor3\n0\n0\n0\n0\n255\n255\nColor4\n0\n0\n0\n0\n255\n255\nOther\n255\n0\n255\n1\n1\n1\n1\n10\n5\n0\n0\n180\n")
     p.close()
-    
+
+#Restart program
 def trycam():
     os.execl(sys.executable, os.path.abspath(__file__), *sys.argv) 
-    
+
+#Find the cam port
 if True:
     cap = cv2.VideoCapture(0)
     if cap is None or not cap.isOpened():
@@ -106,6 +94,7 @@ if True:
             if cap is None or not cap.isOpened():
                 def nothing():
                     pass
+                #Error screen
                 print(f"{logtypes.WARNING}Can't find a camera pluged in")
                 print(f"{logtypes.DEBUG}Check if your device is pluged into the device all the way")
                 master = Tk()
@@ -136,7 +125,8 @@ if True:
     else:
         print(f"{logtypes.INFO}Cam found on port 0")
         camport = 0
-        
+
+#Sets vars for later
 mintarget = 0
 maxtarget = 180
 
@@ -147,6 +137,8 @@ showerror3 = False
     
 mintarget_var = 0
 maxtarget_var = 0
+
+#Start window
 while not allow:
     sys.stdout.close()
     sys.stdout = open(str(loglocation), 'a')
@@ -167,7 +159,7 @@ while not allow:
     helpshown = False
     def openwiki():
         global helpshown
-        url = 'https://example.com'
+        url = 'https://github.com/A-Digital-Person/CAPTTool/wiki'
         webbrowser.open(url)
         if not helpshown:
             wiki = Label(master, text = "For help go to: " + str(url),fg='#ff4000')
@@ -290,10 +282,12 @@ while not allow:
             showerror = False
             showerror2 = False
             showerror3 = True
-            
+
+#Session timers
 starttime = time.time()
 bstarttime = time.time()
 
+#Windoes creations
 cv2.namedWindow("Orginal")
 cv2.namedWindow("Mask")
 cv2.namedWindow("CTRL1")
@@ -302,12 +296,14 @@ cv2.namedWindow("CTRL3")
 cv2.namedWindow("CTRL4")
 cv2.namedWindow("OTHER")
 
+#Resize windoes
 cv2.resizeWindow("CTRL1", 285, 320)
 cv2.resizeWindow("CTRL2", 285, 320)
 cv2.resizeWindow("CTRL3", 285, 320)
 cv2.resizeWindow("CTRL4", 285, 320)
 cv2.resizeWindow("OTHER", 285, 320)
 
+#Pos windoes
 cv2.moveWindow('Orginal',0,0)
 cv2.moveWindow('Mask',640,0)
 cv2.moveWindow('CTRL1',0,510)
@@ -316,10 +312,12 @@ cv2.moveWindow('CTRL3',570,510)
 cv2.moveWindow('CTRL4',855,510)
 cv2.moveWindow('OTHER',1140,510)
 
+#Max values
 hhigh = 180
 shigh = 255
 vhigh = 255
 
+#Read session file and set old data to trackbars
 p = open('persistent.yml', 'r')
 per = yaml.safe_load(p)
 
@@ -372,12 +370,12 @@ cv2.createTrackbar("Mask", "CTRL2", int(per['color1']['mask']), 1, close)
 cv2.createTrackbar("Mask", "CTRL3", int(per['color3']['mask']), 1, close)
 cv2.createTrackbar("Mask", "CTRL4", int(per['color4']['mask']), 1, close)
 
+#Base vars
 keypress = 1
-
 kernel = numpy.ones((10,10), numpy.uint8)
-
 frame = 0
 
+#Calc angle
 def getang(c1x,c1y,c2x,c2y,c3x,c3y,c4x,c4y):
     global frame
     c1x = float(c1x)
@@ -423,16 +421,23 @@ def getang(c1x,c1y,c2x,c2y,c3x,c3y,c4x,c4y):
     alpha = 180 - beta
     alpha = '%.0f'%(alpha)
     return int(beta)
-        
 
+#Data every second
+lastprint = 0
+
+#Main loop
 while (keypress != 27):
+    #Get cam data
     ret, frame = cap.read()
     
+    #Reset session timer
     if keypress == ord('r'):
         starttime = time.time()
     
+    #Set frame to hsv
     hsvframe = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
     
+    #Read trackbars
     c1vl = cv2.getTrackbarPos("V Min", "CTRL1")
     c1sl = cv2.getTrackbarPos("S Min", "CTRL1")
     c1hl = cv2.getTrackbarPos("H Min", "CTRL1")
@@ -461,6 +466,7 @@ while (keypress != 27):
     c4sh = cv2.getTrackbarPos("S Max", "CTRL4")
     c4hh = cv2.getTrackbarPos("H Max", "CTRL4")
     
+    #Set colors
     c1l = [c1hl,c1sl,c1vl]
     c1h = [c1hh,c1sh,c1vh]
     
@@ -473,6 +479,7 @@ while (keypress != 27):
     c4l = [c4hl,c4sl,c4vl]
     c4h = [c4hh,c4sh,c4vh]
     
+    #Set arrays
     c1l = numpy.array(c1l, dtype = "uint8")
     c1h = numpy.array(c1h, dtype = "uint8")
     c2l = numpy.array(c2l, dtype = "uint8")
@@ -482,11 +489,13 @@ while (keypress != 27):
     c4l = numpy.array(c4l, dtype = "uint8")
     c4h = numpy.array(c4h, dtype = "uint8")
     
+    #Set mask
     mask1 = cv2.inRange(hsvframe, c1l, c1h)
     mask2 = cv2.inRange(hsvframe, c2l, c2h)
     mask3 = cv2.inRange(hsvframe, c3l, c3h)
     mask4 = cv2.inRange(hsvframe, c4l, c4h)
     
+    #Clean pixels
     f1 = cv2.bitwise_or(hsvframe, hsvframe, mask = mask1)
     f2 = cv2.bitwise_or(hsvframe, hsvframe, mask = mask2)
     f3 = cv2.bitwise_or(hsvframe, hsvframe, mask = mask3)
@@ -539,12 +548,8 @@ while (keypress != 27):
     else:
         ctx4 = 1
         cty4 = 1
-        
-#     print(f"{logtypes.CEN}1: x:" + str(ctx1) + " y:" + str(cty1) + f"")
-#     print(f"{logtypes.CEN}2: x:" + str(ctx2) + " y:" + str(cty2) + f"")
-#     print(f"{logtypes.CEN}3: x:" + str(ctx3) + " y:" + str(cty3) + f"")
-#     print(f"{logtypes.CEN}4: x:" + str(ctx4) + " y:" + str(cty4) + f"")
 
+    #Draw dots
     cv2.circle(frame,(int(ctx1),int(cty1)),cv2.getTrackbarPos("Dot Scale", "OTHER") + 2,(0,0,0),-1)
     cv2.circle(frame,(int(ctx2),int(cty2)),cv2.getTrackbarPos("Dot Scale", "OTHER") + 2,(0,0,0),-1)
     cv2.circle(frame,(int(ctx3),int(cty3)),cv2.getTrackbarPos("Dot Scale", "OTHER") + 2,(0,0,0),-1)
@@ -555,9 +560,11 @@ while (keypress != 27):
     cv2.circle(frame,(int(ctx3),int(cty3)),cv2.getTrackbarPos("Dot Scale", "OTHER"),(0,0,255),-1)
     cv2.circle(frame,(int(ctx4),int(cty4)),cv2.getTrackbarPos("Dot Scale", "OTHER"),(255,255,255),-1)
     
+    #Fix line scale
     if cv2.getTrackbarPos("Line Scale", "OTHER") == 0:
         cv2.setTrackbarPos("Line Scale", "OTHER", 1)
     
+    #Draw lines
     frame = cv2.line(frame, (int(ctx1),int(cty1)), (int(ctx2),int(cty2)), (0,0,0), cv2.getTrackbarPos("Line Scale", "OTHER")+5)
     frame = cv2.line(frame, (int(ctx3),int(cty3)), (int(ctx4),int(cty4)), (0,0,0), cv2.getTrackbarPos("Line Scale", "OTHER")+5)
     frame = cv2.line(frame, (int(ctx1),int(cty1)), (int(ctx2),int(cty2)), (255,255,255), cv2.getTrackbarPos("Line Scale", "OTHER"))
@@ -597,11 +604,12 @@ while (keypress != 27):
                         showerror = True
     fimg = final
     
+    #Show text
     fimg = cv2.cvtColor(fimg,cv2.COLOR_HSV2BGR)
     if showerror:
         fimg = cv2.putText(fimg, "No Mask Enabled", (190,240), cv2.FONT_HERSHEY_SIMPLEX, 1, (cv2.getTrackbarPos("Text B", "OTHER"),cv2.getTrackbarPos("Text G", "OTHER"),cv2.getTrackbarPos("Text R", "OTHER")), 2, cv2.LINE_AA)
 
-    
+    #Draw the dots
     if cv2.getTrackbarPos("Mask", "CTRL1") == 1:
         cv2.circle(fimg,(int(ctx1),int(cty1)),cv2.getTrackbarPos("Dot Scale", "OTHER") + 2,(0,0,0),-1)
         cv2.circle(fimg,(int(ctx1),int(cty1)),cv2.getTrackbarPos("Dot Scale", "OTHER"),(255,0,0),-1)
@@ -614,7 +622,8 @@ while (keypress != 27):
     if cv2.getTrackbarPos("Mask", "CTRL4") == 1:
         cv2.circle(fimg,(int(ctx4),int(cty4)),cv2.getTrackbarPos("Dot Scale", "OTHER") + 2,(0,0,0),-1)
         cv2.circle(fimg,(int(ctx4),int(cty4)),cv2.getTrackbarPos("Dot Scale", "OTHER"),(255,255,255),-1)
-        
+    
+    #Draw the lines
     if (cv2.getTrackbarPos("Mask", "CTRL1") == 1) and (cv2.getTrackbarPos("Mask", "CTRL2") == 1):
         fimg = cv2.line(fimg, (int(ctx1),int(cty1)), (int(ctx2),int(cty2)), (0,0,0), cv2.getTrackbarPos("Line Scale", "OTHER")+5)
         fimg = cv2.line(fimg, (int(ctx1),int(cty1)), (int(ctx2),int(cty2)), (255,255,255), cv2.getTrackbarPos("Line Scale", "OTHER"))
@@ -622,6 +631,7 @@ while (keypress != 27):
         fimg = cv2.line(fimg, (int(ctx3),int(cty3)), (int(ctx4),int(cty4)), (0,0,0), cv2.getTrackbarPos("Line Scale", "OTHER")+5)
         fimg = cv2.line(fimg, (int(ctx3),int(cty3)), (int(ctx4),int(cty4)), (255,255,255), cv2.getTrackbarPos("Line Scale", "OTHER"))
     
+    #Timer calc
     fortimer = int( ((time.time() - starttime)/60))*60
     
     fortimer = str( int((time.time() - starttime)/60) ) + ":" + str( int(time.time() - starttime)-int(fortimer) ).zfill(2)
@@ -629,6 +639,7 @@ while (keypress != 27):
     frame = cv2.putText(frame, "Session Time: " + fortimer, (3,27), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 5, cv2.LINE_AA)
     frame = cv2.putText(frame, "Session Time: " + fortimer, (3,27), cv2.FONT_HERSHEY_SIMPLEX, 1, (cv2.getTrackbarPos("Text B", "OTHER"),cv2.getTrackbarPos("Text G", "OTHER"),cv2.getTrackbarPos("Text R", "OTHER")), 2, cv2.LINE_AA)
     
+    #Try calc angle
     try:
         angle = getang(ctx1,cty1,ctx2,cty2,ctx3,cty3,ctx4,cty4)
         frame = cv2.putText(frame, "Angle: " + str(angle), (3,57), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 5, cv2.LINE_AA)
@@ -639,10 +650,11 @@ while (keypress != 27):
         frame = cv2.putText(frame, "ERROR: Calculating error", (3,57), cv2.FONT_HERSHEY_SIMPLEX, 1, (cv2.getTrackbarPos("Text B", "OTHER"),cv2.getTrackbarPos("Text G", "OTHER"),cv2.getTrackbarPos("Text R", "OTHER")), 2, cv2.LINE_AA)
         print(f"{logtypes.ERROR}Can't calculate angle")
         
-    
+    #Target values
     mintarget = cv2.getTrackbarPos("Target Min", "OTHER")
     maxtarget = cv2.getTrackbarPos("Target Max", "OTHER")
     
+    #Warnings for min and max
     if int(angle) <= mintarget:
         frame = cv2.putText(frame, "WARN: UNDER", (3,117), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 5, cv2.LINE_AA)
         frame = cv2.putText(frame, "WARN: UNDER", (3,117), cv2.FONT_HERSHEY_SIMPLEX, 1, (cv2.getTrackbarPos("Text B", "OTHER"),cv2.getTrackbarPos("Text G", "OTHER"),cv2.getTrackbarPos("Text R", "OTHER")), 2, cv2.LINE_AA)
@@ -651,16 +663,29 @@ while (keypress != 27):
         frame = cv2.putText(frame, "WARN: OVER", (3,117), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 5, cv2.LINE_AA)
         frame = cv2.putText(frame, "WARN: OVER", (3,117), cv2.FONT_HERSHEY_SIMPLEX, 1, (cv2.getTrackbarPos("Text B", "OTHER"),cv2.getTrackbarPos("Text G", "OTHER"),cv2.getTrackbarPos("Text R", "OTHER")), 2, cv2.LINE_AA)
         pysine.sine(700, 0.1)
-        
+    
+    #Show frames
     cv2.imshow("Orginal", frame)
     cv2.imshow("Mask", fimg)
     
+    #Slowdown data printing to file
+    if lastprint != fortimer:
+        p = open(datafile, 'a')
+        p.write(str(datetime.now()) + '\t' + str(int(angle)) + '\n')
+        p.close()
+    lastprint = fortimer
+    
+    #Save all prints to log file
     sys.stdout.close()
     sys.stdout = open(str(loglocation), 'a')
     
+    #Delay
     keypress = cv2.waitKey(30)
-    
+
+#Close program
 cap.release()
+
+#Save all trackbar data
 p = open(r'persistent.yml', 'w')
 saveraw = {'color1': {'hl': int(cv2.getTrackbarPos("H Min", "CTRL1")),
                       'sl': int(cv2.getTrackbarPos("S Min", "CTRL1")),
@@ -702,6 +727,7 @@ yaml.dump(saveraw, p)
 # p.write(saveme)
 p.close()
 
+#Timer calc to log
 fortimer = int( ((time.time() - astarttime)/60))*60
 fortimer = str( int((time.time() - astarttime)/60) ) + ":" + str( int(time.time() - astarttime)-int(fortimer) ).zfill(2)
 
@@ -711,6 +737,8 @@ fortimer = int( ((time.time() - bstarttime)/60))*60
 fortimer = str( int((time.time() - bstarttime)/60) ) + ":" + str( int(time.time() - bstarttime)-int(fortimer) ).zfill(2)
 
 print(f"{logtypes.INFO}The tracking timer run for " + str(fortimer))
+
+#Close everything and exit program
 sys.stdout.close()
 cv2.destroyAllWindows()
 sys.exit()
