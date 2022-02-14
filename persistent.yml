@@ -1,43 +1,43 @@
 blackout: 0
 color1:
-  hh: 110
-  hl: 76
+  hh: 0
+  hl: 0
   mask: 0
   sh: 255
-  sl: 74
+  sl: 0
   vh: 255
-  vl: 120
+  vl: 0
 color2:
-  hh: 32
-  hl: 32
-  mask: 0
-  sh: 86
-  sl: 86
-  vh: 78
-  vl: 78
+  hh: 0
+  hl: 0
+  mask: 1
+  sh: 0
+  sl: 0
+  vh: 0
+  vl: 0
 color3:
-  hh: 6
-  hl: 6
-  mask: 0
-  sh: 128
-  sl: 128
+  hh: 0
+  hl: 0
+  mask: 1
+  sh: 0
+  sl: 0
   vh: 0
   vl: 0
 color4:
-  hh: 117
-  hl: 117
-  mask: 0
-  sh: 104
-  sl: 104
+  hh: 0
+  hl: 0
+  mask: 1
+  sh: 0
+  sl: 0
   vh: 0
   vl: 0
 scale:
-  dot: 10
-  line: 5
+  dot: 8
+  line: 6
 targets:
-  max: 122
-  min: 21
+  max: 180
+  min: 0
 text:
   b: 255
   g: 255
-  r: 78
+  r: 255
